@@ -18,7 +18,7 @@ const ListeDesEnregistrements = (props: Props) => {
       if (res) {
         setData(res.data?.data);
         console.log(res.data?.data);
-        console.log("All Data fetch...");
+        console.log("All Data fetched...");
       }
     } catch (error) {
       console.log(error);
@@ -42,6 +42,19 @@ const ListeDesEnregistrements = (props: Props) => {
       } catch (error) {
         console.error("Erreur lors de la suppression de la classe", error);
       }
+    }
+  };
+
+  const addNewEntry = async (newEntry: any) => {
+    try {
+      const res = await axios.post("/api/add", newEntry);
+      if (res.data.success) {
+        console.log("New entry added successfully");
+        // Actualiser la liste des enregistrements après l'ajout
+        getAllData();
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'ajout de la nouvelle entrée", error);
     }
   };
 
