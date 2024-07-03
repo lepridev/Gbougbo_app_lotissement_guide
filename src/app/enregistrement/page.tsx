@@ -9,6 +9,8 @@ type Props = {};
 
 const CreateEnregistrement = (props: Props) => {
   const router = useRouter();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [enregistrement, setEnregistrement] = useState({
     reference: "",
     name: "",
@@ -30,6 +32,22 @@ const CreateEnregistrement = (props: Props) => {
       adresseVendeur: "",
     },
   });
+
+  const getAllData = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get("/api/search");
+      if (res) {
+        setData(res.data?.data);
+        console.log(res.data?.data);
+        console.log("All Data fetch...");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -55,6 +73,7 @@ const CreateEnregistrement = (props: Props) => {
     try {
       const res = await axios.post("/api/add/create", enregistrement);
       if (res.data?.success === true) {
+        getAllData();
         router.push("/recaps");
       }
     } catch (error: any) {

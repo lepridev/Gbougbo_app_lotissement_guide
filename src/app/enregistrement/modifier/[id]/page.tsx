@@ -10,6 +10,24 @@ type Props = {};
 const ModifEnregistrement = ({ params }: any) => {
   const { id } = params;
   const router = useRouter();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const getAllData = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get("/api/search");
+      if (res) {
+        setData(res.data?.data);
+        console.log(res.data?.data);
+        console.log("All Data fetch...");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [enregistrement, setEnregistrement] = useState({
     reference: "",
@@ -99,6 +117,7 @@ const ModifEnregistrement = ({ params }: any) => {
     try {
       const res = await axios.post("/api/add/modifier", dataTosend);
       if (res) {
+        getAllData();
         router.push("/recaps");
         console.log("res", res);
       }
